@@ -8,7 +8,7 @@ Public Sub GetDrawnValues()
 
  
 
-    Dim WbDest As Workbook
+  Dim WbDest As Workbook
 
     Dim WbSource As Workbook
 
@@ -44,7 +44,7 @@ Public Sub GetDrawnValues()
 
  
 
-    filepath = \\Data Reporting\Test\
+    filepath = \\Data & Reporting\Reporting\
 
     filename = Dir(filepath & "Report -*.xlsx")
 
@@ -64,7 +64,7 @@ Public Sub GetDrawnValues()
 
  
 
-    refDate = WsDest.Range("B3").Value
+    refDate = WsDest.Range("B3").value
 
     refMonth = Format(refDate, "Mmm")
 
@@ -74,9 +74,9 @@ Public Sub GetDrawnValues()
 
     With pivot
 
-        countValue = .GetPivotData("Count", "Drawn Date", refMonth, "Years", refYear).Value
+        countValue = IIf(IsError(.GetPivotData("Count", "Drawn Date", refMonth, "Years", refYear)), 0, .GetPivotData("Count", "Drawn Date", refMonth, "Years", refYear).value)
 
-        drawnDollarValue = .GetPivotData("Drawn $", "Drawn Date", refMonth, "Years", refYear).Value
+        drawnDollarValue = IIf(IsError(.GetPivotData("Drawn $", "Drawn Date", refMonth, "Years", refYear)), 0, .GetPivotData("Drawn $", "Drawn Date", refMonth, "Years", refYear).value)
 
     End With
 
@@ -84,9 +84,9 @@ Public Sub GetDrawnValues()
 
     With pivot2
 
-        countValue2 = .GetPivotData("Count of BBD APP #", "Date", refMonth, "Years2", refYear).Value
+        countValue2 = IIf(IsError(.GetPivotData("Count of BBD APP #", "Date", refMonth, "Years2", refYear)), 0, .GetPivotData("Count of BBD APP #", "Date", refMonth, "Years2", refYear).value)
 
-        drawnDollarValue2 = .GetPivotData("Drawn Amount", "Date", refMonth, "Years2", refYear).Value
+        drawnDollarValue2 = IIf(IsError(.GetPivotData("Drawn Amount", "Date", refMonth, "Years2", refYear)), 0, .GetPivotData("Drawn Amount", "Date", refMonth, "Years2", refYear).value)
 
     End With
 
@@ -98,15 +98,15 @@ Public Sub GetDrawnValues()
 
     For Each cell In colrange
 
-        If cell.Value = refDate Then
+        If cell.value = refDate Then
 
-            WsDest.Cells(40, cell.Column).Value = drawnDollarValue
+            WsDest.Cells(40, cell.Column).value = drawnDollarValue
 
-            WsDest.Cells(45, cell.Column).Value = countValue
+            WsDest.Cells(45, cell.Column).value = countValue
 
-            WsDest.Cells(29, cell.Column).Value = drawnDollarValue2
+            WsDest.Cells(29, cell.Column).value = drawnDollarValue2
 
-            WsDest.Cells(34, cell.Column).Value = countValue2
+            WsDest.Cells(34, cell.Column).value = countValue2
 
         End If
 
@@ -115,7 +115,3 @@ Public Sub GetDrawnValues()
  
 
     WbSource.Close
-
- 
-
-End Sub
